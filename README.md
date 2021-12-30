@@ -1,24 +1,24 @@
-# PiClock
-A Fancy Clock built around a monitor and a Raspberry Pi
+# PiWeatherStation
+A nice weather station based on a Raspberry Pi and his official touchscreen.
 
-![PiClock Picture](https://raw.githubusercontent.com/n0bel/PiClock/master/Pictures/20150307_222711.jpg)
+![PiWeatherStation Picture](https://raw.githubusercontent.com/CopperTundra/PiWeatherStation/master/Pictures/20150307_222711.jpg)
 
-This project started out as a way to waste a Saturday afternoon.
-I had a Raspberry Pi and an extra monitor and had just taken down an analog clock from my livingroom wall.
-I was contemplating getting a radio sync'ed analog clock to replace it, so I didn't have to worry about
-it being accurate.
 
-But instead the PiClock was born.
-
-The early days and evolution of it are chronicled on my blog http://n0bel.net/v1/index.php/projects/raspberry-pi-clock
+This project is a way to build your own weather station using a Raspberry Pi and some material.
+Features :
+- Real-time weather conditions
+- Rain clouds map forecast, with touch-to-zoom feature
+- Weather forecast for the next 7 days
+- Date and analog clock display
+- Sunrise and sunset time
+- Moon phase
+- Indoor temperature, pressure and humidity using Zigbee sensors
 
 If you want to build your own, I'd suggest starting with the overview
-https://github.com/n0bel/PiClock/blob/master/Documentation/Overview.md
+https://github.com/CopperTundra/PiWeatherStation/master/Documentation/Overview.md
 
-If you want to use the PiClock on your desktop (not your Pi), I'd suggest using these instructions.
-https://github.com/n0bel/PiClock/blob/master/Documentation/Install-Clock-Only.md
+Of course you can jump to the hardware guide anytime https://github.com/CopperTundra/PiWeatherStation/master/Documentation/Hardware.md
 
-All of the extra hardware (IR Remote, GPIO buttons, Temperature, LEDs) are optional, so you can then jump to the install guide
-https://github.com/n0bel/PiClock/blob/master/Documentation/Install.md
+Setup documentation is here :
 
-Of course you can jump to the hardware guide anytime https://github.com/n0bel/PiClock/blob/master/Documentation/Hardware.md
+https://github.com/CopperTundra/PiWeatherStation/master/Documentation/Install.md

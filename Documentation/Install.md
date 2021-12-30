@@ -1,21 +1,11 @@
-# Install Instructions for PiClock
-## For Raspbian Stretch
+# Install Instructions for PiWeatherStation
 
-PiClock and this install guide are based on Raspian Stretch downloaded from
-https://www.raspberrypi.org/downloads/raspbian/ I suggest using
-"Raspbian Stretch with desktop"  It will work with many raspbian versions,
-but you may have to add more packages, etc.  That exercise is left for the reader.
+PiWeatherStation and this install guide are based on Raspian. I suggest using a Raspbian version with a desktop.
 
-What follows is a step by step guide.  If you start with a new clean raspbian
-image, it should just work. I'm assuming that you already know how to hook
-up your Raspi, monitor, and keyboard/mouse.   If not, please do a web search
-regarding setting up the basic hardware for your Raspi.
-
-### Download Raspbian Stretch and put it on an SD Card
+## Download Raspbian and put it on an SD Card
 
 The instructions for doing this are on the following page:
-https://www.raspberrypi.org/documentation/installation/installing-images/README.md
-
+https://www.raspberrypi.com/documentation/computers/getting-started.html#installing-the-operating-system
 ### First boot and configure
 A keyboard and mouse are really handy at this point.
 When you first boot your Pi, you'll be presented with the desktop.
@@ -28,148 +18,38 @@ We need to configure a few more things.
 
 Navigate to Menu->Preferences->Raspberry Pi Configuration.
 Just change the Items below.
- - System Tab
-  - Hostname: (Maybe set this to PiClock?)
+- System Tab
+  - Hostname: Change it to the name that you want
   - Boot: To Desktop
   - Auto Login: Checked
-  - Overscan: (Initally leave as default, but if your monitor has extra
-    black area on the border, or bleeds off the edge, then change this)
- - Interfaces
-  - 1-Wire Enable (for the inside temperature, DS18B20 if you're using it)
-  - SSH is handy (if you'd like to connect to your clock from another computer)
-  - VNC can be handy  (same reason as ssh)
-
+- Interfaces
+  - enable SSH
 
 Click ok, and allow it to reboot.
-
-### editing config.txt
-
-(Only required if you will be using IR Remote control or DS18B20 temperature
- sensors)
-Log into your Pi, (either on the screen or via ssh)
-
-use nano to edit the boot config file
+Check the IP of your Raspberry Pi by typing
 ```
-sudo nano /boot/config.txt
+sudo ifconfig
 ```
-Be sure the lines
+From this point, you're free to get rid of your mouse/keyboard and you may proceed over SSH. It will allow you to open a bash connection to your Raspberry Pi over your PC.
+To open a SSH connection, from your PC :
+- Open a Powershell window (Windows 10/11) or a Terminal (MacOSX, Linux)
+- Type :
 ```
-dtoverlay=lirc-rpi,gpio_in_pin=3,gpio_out_pin=2
-dtoverlay=w1-gpio,gpiopin=4
-```
-are in there somewhere, and occur only once.
-The default config has lirc-rpi commented out (# in front), don't forget to remove the #
-Also add the pin arguments just as shown above, if they are not already there.
-
-You're free to change the pins, but of course the hardware guide will need to
-be adjusted to match.
-
-use nano to edit the modules file
-```
-sudo nano /etc/modules
-```
-Be sure the lines
-```
-lirc_rpi gpio_in_pin=3 gpio_out_pin=2
-w1-gpio
-```
-are in there somewhere, and only occur once.
-
-reboot
-```
-sudo reboot
+ssh hostname@ipaddress
 ```
 
-### Get connected to the internet
+## Get all the software that PiWeatherStation needs
+### Install everything
 
-Verify you have internet access from the Pi
+Clone this repository and use the install script :
 
-```
-ping github.com
-```
-(remember ctrl-c aborts programs, like breaking out of ping, which will
-go on forever)
+~~~
+git clone https://github.com/CopperTundra/PiWeatherStation.git
+chmod +x install.sh
+sudo ./install.sh
+~~~
 
-### Get all the software that PiClock needs.
-
-Become super user! (root)  (trumpets play in the background) (ok, maybe
-just in my head)
-```
-sudo su -
-```
-update the repository
-```
-apt-get update
-```
-then get qt4 for python
-```
-apt-get install python-qt4
-```
-you may need to confirm some things, like:
-After this operation, 59.5 MB of additional disk space will be used.
-Do you want to continue [Y/n]? y
-Go ahead, say yes
-
-then get ws281x driver for python (optional for the NeoPixel LED Driver)
-```
-pip install rpi_ws281x
-```
-Someversions of Raspbian need python-dev to be installed as well, before
-rpi-ws281x can be installed.  If the prevous command fails reporting
-a missing include file, then do this:
-```
-apt-get install python-dev
-```
-Then try the pip command again.
-
-then install more needed python libraries
-```
-pip install python-dateutil --upgrade
-pip install tzlocal --upgrade
-pip install python-metar --upgrade
-```
-
-then get unclutter (disables the mouse pointer when there's no activity)
-```
-apt-get install unclutter
-```
-
-### Get the DS18B20 Temperature driver for Python (optional)
-
-(you must still be root [super user])
-```
-git clone https://github.com/timofurrer/w1thermsensor.git && cd w1thermsensor
-python setup.py install
-```
-
-### Get Lirc driver for IR remote (optional)
-
-(you must still be root [super user])
-```
-apt-get install lirc
-```
-
-use nano to edit lirc options file
-```
-sudo nano /etc/lirc/lirc_options.conf
-```
-Be sure the uinput line appears as follows
-```
-uinput         = True
-```
-
-Be sure the driver line appears as follows
-```
-driver          = default
-
-```
-
-### Get mpg123 (optional to play NOAA weather radio streams)
-
-(you must still be root [super user])
-```
-apt-get install mpg123
-```
+If you get no error, you're good to proceed to the configuration !
 
 ### reboot
 To get some things running, and ensure the final config is right, we'll do
@@ -177,149 +57,39 @@ a reboot
 ```
 reboot
 ```
+### Configure your PiWeatherStation
 
-### Get the PiClock software
-Log into your Pi, (either on the screen or via ssh) (NOT as root)
-You'll be in the home directory of the user pi (/home/pi) by default,
-and this is where we want to be.  Note that the following command while
-itself not being case sensitive, further operation of PiClock may be
-affected if the upper and lower case of the command is not followed.
-```
-git clone https://github.com/n0bel/PiClock.git
-```
-(Optional for GPIO keys)
-Once that is done, you'll have a new directory called PiClock
-A few commands are needed if you intend to use gpio buttons
-and the gpio-keys driver to compile it for the latest Raspbian:
-```
-cd PiClock/Button
-make gpio-keys
-cd ../..
-```
+#### Configure the PiWeatherStation API keys
 
-### Set up Lirc (IR Remote)
+First things first, you need to get an API key for Mapbox and for OpenWeatherMap.org. It's totally free for low data usage !
 
-If you're using the recommended IR Key Fob,
-https://www.google.com/search?q=Mini+Universal+Infrared+IR+TV+Set+Remote+Control+Keychain
-you can copy the lircd.conf file included in the distribution as follows:
-```
-sudo cp IR/lircd.conf /etc/lirc/lircd.conf.d/
-```
-If you're using something else, you'll need to use irrecord, or load a remote file
-as found on http://lirc.org/
+- Mapbox : https://www.mapbox.com/
+  - Register and login, you'll get an API key in your account under the section "Default public token"
+- OpenWeatherMap.org : https://openweathermap.org/
+  - Register and login, you'll get an API key in the section "_YourName_/My API keys"
+ 
+The PiWeatherStation usage is well below the maximums imposed by the no cost API keys.
 
-The software expects 7 keys.   KEY_F1, KEY_F2, KEY_F3, KEY_UP, KEY_DOWN, KEY_RIGHT
-and KEY_LEFT.   Lirc takes these keys and injects them into linix as if they
-were typed from a keyboard.   PyQPiClock.py then simply looks for normal keyboard
-events.   Therefore of course, if you have a usb keyboard attached, those keys
-work too.  On the key fob remote, F1 is power, F2 is mute and F3 is AV/TV.
+**Protect your API keys.**  You'd be surprised how many pastebin's are out
+there with valid API keys, because of people not being careful. _If you post
+your keys somewhere, your usage will skyrocket, and your bill as well._ 
+An API key is like a password, nobody has to know it except you !
 
-You should (must) verify your IR codes.   I've included a program called IRCodes.pl
-which will verify that your lircd.conf is setup correctly.
-If you've rebooted after installing lircd.conf, you'll have to stop lirc first:
-```
-sudo service lirc stop
-```
-Then use the IRCodes.pl program as follows:
-```
-perl IR/IRCodes.pl
-```
-Yes, I reverted to perl.. I may redo it in Python one day.
-
-If you're using the recommended key fob remote, they come randomly programmed from
-the supplier.   To program them you press and hold the mute button (the middle one)
-while watching the screen scroll through codes.
-When the screen shows
-```
-************ KEY_F2
-```
-STOP! then try the other keys, be sure they all report KEY_UP, KEY_DOWN correctly.
-If not press and hold the mute button again, waiting for the asterisks and KEY_F2,
-then STOP again, try the other keys.   Repeat the process until you have all the
-keys working.
-
-Ctrl-C to abort perl.
-
-then reboot
-```
-sudo reboot
-```
-
-
-### Configure the PiClock api keys
-
-We need to set API keys for DarkSky and Mapbox or Google Maps.
-These are both unless you have large volume.
-The PiClock usage is well below the maximums imposed by the no cost api keys.
-
-#### DarkSky api keys
-
-DarkSky api keys are created at this link:
-https://darksky.net/dev
-
-#### Map API Key
-
-You have your choice of Mapbox or Google Maps to get your underlying maps from.
-You only need one or the other (mbapi or googleapi)
-
-#### Google Maps API key
-
-A Google Maps api key is required to use Google Maps.
-(Requires credit card which won't be charged unless usage is great.)
-
-An intro to Google static maps api keys, and a link to creating your account and ApiKeys:
-https://developers.google.com/maps/documentation/maps-static/intro
-You'll require a google user and password.  It'll also require a credit card.
-The credit card should not be charged, because my reading of
-https://cloud.google.com/maps-platform/pricing/sheet/ the $200.00 credit will
-apply, and your charges incurred will be for 31 map pulls per month will be
-$0.62 , if you reboot daily.
-You'll be required to create a "project" (maybe PiClock for a project name?)
-You need to then activate the key.
-
-_Protect your API keys._  You'd be surprised how many pastebin's are out
-there with valid API keys, because of people not being careful.   _If you post
-your keys somewhere, your usage will skyrocket, and your bill as well._  Google
-has the ability to add referer, device and ip requirements on your api key.  It
-can also allow you to limit an api key to specific applications only (static-maps)
-in this case.   Also you might consider disabling all the other APIs on your
-project dashboard.   Under the Billing section of things you can set up budgets
-and alerts.  (Set to like $1.00)
-
-#### Mapbox api keys
-
-Mapbox api keys (access tokens) are created by signing up at this link:
-
-https://www.mapbox.com/signup/
-
-
-
-Now that you have your api keys...
+Now that you have your API keys...
 
 ```
-cd PiClock
-cd Clock
+cd PiClock/Clock
 cp ApiKeys-example.py ApiKeys.py
 nano ApiKeys.py
 ```
-Put your api keys in the file as indicated
-```
-#change this to your API keys
-# DarkSky API key
-dsapi = 'YOUR DARKSKY API KEY'
-# Map API keys -- only needs 1 of the following
-# Google Maps API key (if usemapbox is not set in Config)
-googleapi = 'YOUR GOOGLE MAPS API KEY'
-# Mapbox API key (access_token) [if usemapbox is set in Config]
-mbapi = 'YOUR MAPBOX ACCESS TOKEN'
-```
+Put your API keys in the file as indicated.
 
-### Configure your PiClock
-here's were you tell PiClock where your weather should come from, and the
+### Configure your PiWeatherStation
+here's were you tell PiWeatherStation where your weather should come from, and the
 radar map centers and markers.
 
 ```
-cd PiClock
+cd PiWeatherStation
 cd Clock
 cp Config-Example.py Config.py
 nano Config.py
@@ -331,27 +101,17 @@ set up in python syntax.  The positioning of the {} and () and ','
 are not arbitrary.  If you're not familiar with python, use extra
 care not to disturb the format while changing the data.
 
-The first thing is to change the primary_coordinates to yours.  That is really
-all that is manditory.  Further customization of the radar maps can be done in
-the Radar section.  There you can customize where your radar images are centered
-and where the markers appear on those images.  Markers are those little red
-location pointers.  Radar1 and 2 show on the first page, and 3 and 4 show on the
-second page of the display (here's a post of about that:
-https://www.facebook.com/permalink.php?story_fbid=1371576642857593&id=946361588712436&substory_index=0 )
+The first thing is to change the primary_coordinates to yours. That is really all that is manditory. Easiest way to get them is to use Google Maps and right click on your location, by clicking on your coordinates you will copy them. 
 
-The second thing to change is your NOAA weather radio stream url.  You can
-find it here: http://noaaweatherradio.org/  They don't put the .mp3 urls
-where they are easily accessable, so you need to use your browser to "View Page Source"
-in order to find the proper .mp3 url.
+![How to : Google Maps Coordinates](https://raw.githubusercontent.com/CopperTundra/PiWeatherStation/master/Documentation/GoogleMapsCoordinates.png)
 
 At this point, I'd not recommend many other changes until you have tested
 and gotten it running.
 
 ### Run it!
-You'll need to be on the desktop, in a terminal program.
-
+Just run it :
 ```
-cd PiClock
+cd PiWeatherStation
 sh startup.sh -n -s
 ```
 Your screen should be covered by the PiClock  YAY!
@@ -362,60 +122,25 @@ doesn't work, or maps are missing, etc the output may give a reason
 or reasons, which usually reference something to do with the config
 file (Config.py)
 
+If everything works you should be able to zoom in/out the radars by touching the display.
+
 ### Logs
 The -s option causes no log files to be created, but
 instead logs to your terminal screen.  If -s is omitted, logs are
-created in PiClock/Clock as PyQtPiClock.[1-7].log, which can also help
-you find issues.  -s is normally omitted when started from the desktop icon
-or from crontab.  Logs are then created for debugging auto starts.
-
-### First Use
-
-  * The space bar or right or left arrows will change the page.
-  * F2 will start and stop the NOAA weather radio stream
-  * F4 will close the clock
-
-If you're using the temperature feature AND you have multiple temperature sensors,
-you'll see the clock display: 000000283872:74.6 00000023489:65.4 or something similar.
-Note the numbers exactly.   Use F4 to stop the clock,
-then..
-```
-nano Temperature/TempNames.py
-```
-Give each number a name, like is shown in the examples in that file
+created in PiWeatherStation/Clock as PyQtPiClock.[1-7].log, which can also help
+you find issues.  -s is normally omitted when started from autostart.  Logs are then created for debugging auto starts.
 
 ### setting the clock to auto start
-At this point the clock will only start when you manually start it, as
-described in the Run It section.
+At this point the clock will only start when you manually start it, as described in the Run It section.
+## Autostart
+We will gonna use systemd standard list. To do this, just use the given PiWeatherStation.service file :
 
-Use only one autostart method.
-## Autostart Method 1
-(NOT as root)
-```
-cd PiClock
-chmod +x PiClock.desktop
-ln PiClock.desktop ~/Desktop
-mkdir ~/.config/autostart
-ln PiClock.desktop ~/.config/autostart
-```
-This puts the a PiClock icon on your desktop.  It also runs it when
-the desktop starts.
+~~~
+cd PiWeatherStation/Clock
+sudo cp PiWeatherStation.service /etc/systemd/system/
+sudo systemctl enable PiWeatherStation
+~~~
 
-## Autostart Method 2
-To have it auto start on boot we need to do one more thing, edit the
-crontab file as follows: (it will automatically start nano)  (NOT as root)
-```
-crontab -e
-```
-and add the following line:
-```
-@reboot sh /home/pi/PiClock/startup.sh
-```
-save the file
-and reboot to test
-```
-sudo reboot
-```
 
 ## Some notes about startup.sh
 startup.sh has a few options:
