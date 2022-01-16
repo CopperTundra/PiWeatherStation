@@ -509,7 +509,7 @@ def wxfinished_owm():
             else:
                 if (paccum > 0.05):
                     s += Config.LRain + '%.0f' % heightm(paccum) + 'mm '
-            s += '%.0f' % tempm(f['temp']) + u'°C'
+            s += '%.0f' % round(tempm(f['temp'])) + u'°C'
         else:
             if (ptype == 'snow'):
                 if (paccum > 0.05):
@@ -517,7 +517,7 @@ def wxfinished_owm():
             else:
                 if (paccum > 0.05):
                     s += Config.LRain + '%.0f' % paccum + 'in '
-            s += '%.0f' % (f['temp']) + u'°F'
+            s += '%.0f' % round(f['temp']) + u'°F'
 
         wx.setStyleSheet(
             "#wx { font-size: " +
@@ -562,8 +562,8 @@ def wxfinished_owm():
             else:
                 if (paccum > 0.05):
                     s += Config.LRain + '%.0f' % heightm(paccum) + 'mm '
-            s += '%.0f' % tempm(f['temp']['max']) + '/' + \
-                 '%.0f' % tempm(f['temp']['min'])
+            s += '%.0f' % round(tempm(f['temp']['max'])) + '/' + \
+                 '%.0f' % round(tempm(f['temp']['min']))
         else:
             if (ptype == 'snow'):
                 if (paccum > 0.05):
@@ -571,8 +571,8 @@ def wxfinished_owm():
             else:
                 if (paccum > 0.05):
                     s += Config.LRain + '%.1f' % paccum + 'in '
-            s += '%.0f' % f['temp']['max'] + '/' + \
-                 '%.0f' % f['temp']['min']
+            s += '%.0f' % round(f['temp']['max']) + '/' + \
+                 '%.0f' % round(f['temp']['min'])
 
         wx.setStyleSheet(
             "#wx { font-size: "
@@ -1239,10 +1239,9 @@ def wxfinished_metar():
         Qt.SmoothTransformation))
     wxdesc.setText(weather)
     wxdesc2.setText(weather)
-#TODO: improve tmperature roundering around 0°C (-0.0°C or 0.0°C is displayed)
     if Config.metric:
-        temper.setText('%.1f' % (f.temp.value('C')) + u'°C')
-        temper2.setText('%.1f' % (f.temp.value('C')) + u'°C')
+        temper.setText('%.1f' % round((f.temp.value('C'))) + u'°C')
+        temper2.setText('%.1f' % round((f.temp.value('C'))) + u'°C')
         press.setText(
             Config.LPressure +
             '%.1f' % f.press.value('MB') + 'mb')

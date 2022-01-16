@@ -1,5 +1,5 @@
-- Fix temperature minus weird behavior around zero Celsius for METAR temperature and forecast temperatures
-- Round temperature to 0.5° instead of 1° for actual temperature
+- Fix temperature minus weird behavior around zero Celsius for METAR temperature and forecast temperatures ✅
+- Replace actual weather with OpenWeatherMap data to increase precision
 - Add a partially transparent background for the Zigbee sensors data
 - Add a battery level using pictograms for the Zigbee sensors
 - Improve energy management by setting screen brightness and better scheduling shutdown hours
