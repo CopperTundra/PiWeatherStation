@@ -1,10 +1,24 @@
+# =====================================================
+#  Copyright (C) 2021 Schuwer Olivier <o.schuwer@gmail.com>
+# =====================================================
+#
+# This file is part of PiWeatherStation.
+# PiWeatherStation is free software: you can redistribute it and/or 
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation, either version 3
+#  of the License, or (at your option) any later version.
+#
+# PiWeatherStation is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the 
+# GNU General Public License for more details.
+# You should have received a copy of the GNU General Public License
+# along with PiWeatherStation. If not, see <https://www.gnu.org/licenses/>.
+
+
 #!/bin/bash
-# Startup script for the PiClock
+# Startup script for the PiWeatherStation
 #
-# Designed to be started from PiClock.desktop (autostart)
-#
-# or alternatively from crontab as follows
-#@reboot sh /home/pi/PiClock/startup.sh
 
 #
 cd $HOME/PiClock
@@ -14,6 +28,7 @@ then
 	export DISPLAY=:0
 fi
 
+COPYRIGHT="<span size='xx-small'>PiWeatherStation  Copyright (C) 2021  Olivier Schuwer \n This program comes with ABSOLUTELY NO WARRANTY. \n This is free software, and you are welcome to redistribute it under certain conditions.</span>"
 # wait for Xwindows and the desktop to start up
 MSG="echo Waiting 45 seconds before starting"
 DELAY="sleep 45"
@@ -33,8 +48,7 @@ fi
 if [ "$1" = "-m" -o "$1" = "--message-delay" ]
 then
 	MSG="echo Waiting $2 seconds for response before starting"
-	#DELAY="xmessage -buttons Now:0,Cancel:1 -default Now -timeout $2 Starting PiClock in $2 seconds"
-	DELAY='zenity --question --title PiClock --ok-label=Now --cancel-label=Cancel --timeout '$2' --text "Starting PiClock in '$2' seconds" >/dev/null 2>&1'
+	DELAY='zenity --no-wrap --question --title PiWeatherStation --ok-label=Now --cancel-label=Cancel --timeout '$2' --text "Starting PiWeatherStation in '$2' seconds\n '$COPYRIGHT'" >/dev/null 2>&1'
 	shift
 	shift
 fi
@@ -49,7 +63,7 @@ then
 fi
 
 #xmessage -timeout 5 Starting PiClock....... &
-zenity --info --timeout 3 --text "Starting PiClock......." >/dev/null 2>&1 &
+zenity --no-wrap --info --timeout 3 --text "${COPYRIGHT}" >/dev/null 2>&1 &
 
 # stop screen blanking
 echo "Disabling screen blanking...."
@@ -68,7 +82,8 @@ fi
 cd Clock
 if [ "$1" = "-s" -o "$1" = "--screen-log" ]
 then
-  echo "Starting PiClock.... logging to screen."
+  echo "PiWeatherStation  Copyright (C) 2021  Olivier Schuwer \n This program comes with ABSOLUTELY NO WARRANTY. \n This is free software, and you are welcome to redistribute it under certain conditions."
+  echo "Starting PiWeatherStation... logging to screen."
   python3 -u PyQtPiClock.py
 else
   # create a new log file name, max of 7 log files
