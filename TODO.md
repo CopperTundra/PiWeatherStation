@@ -9,4 +9,4 @@
 - Set moon phase and sunrise times on two lines
 - Cleanup the code
 - Improve documentation and install scripts
-- Handle properly METAR failed requests, and if non standard METAR request leads to crash with the following message : "AttributeError: 'NoneType' object has no attribute 'replace'"
+- Handle properly METAR failed requests, and if non standard METAR request leads to crash with the following message : "AttributeError: 'NoneType' object has no attribute 'replace'" ✅

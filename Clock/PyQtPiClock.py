@@ -1189,14 +1189,22 @@ def wxfinished_metar():
     global wxicon2, temper2, wxdesc2
     global daytime
 
-    wxstr = str(metarreply.readAll(),'utf-8')
+    try:
+        wxstr = str(metarreply.readAll(),'utf-8')
+    except:
+        print("Error : Could not extract METAR data from URL")
+        return
     # print("[DEBUG] : ", wxstr)
     for wxline in wxstr.splitlines():
         if wxline.startswith(Config.METAR):
             wxstr = wxline
     f = Metar.Metar(wxstr,strict=False)
-    dt = f.time.replace(tzinfo=tzutc()).astimezone(tzlocal.get_localzone())
-
+    try:
+        dt = f.time.replace(tzinfo=tzutc()).astimezone(tzlocal.get_localzone())
+    except:
+        print("Error: METAR string is not valid")
+        print("METAR string : ", wxstr)
+        return
     pri = -1
     weather = ''
     icon = ''
