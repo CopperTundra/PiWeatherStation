@@ -10,3 +10,4 @@
 - Cleanup the code
 - Improve documentation and install scripts
 - Handle properly METAR failed requests, and if non standard METAR request leads to crash with the following message : "AttributeError: 'NoneType' object has no attribute 'replace'" ✅
+- Add last update timestamp to internal temperature sensors

@@ -301,39 +301,20 @@ def tempfinished(msg):
     #TODO: check if variable is available in the message for updating the value
     sensorStruct["sensor"] = tempdata['topic']
     sensorStruct["temperature"] = round(tempdata['temperature'],1)
-    sensorStruct["pressure"] = tempdata['pressure']
+    sensorStruct["pressure"] = round(tempdata['pressure'])
     # sensorStruct["quality"] = tempdata['linkquality']
     # sensorStruct["voltage"] = tempdata['voltage']
-    sensorStruct["humidity"] = round(tempdata['humidity'],1)
+    sensorStruct["humidity"] = round(tempdata['humidity'])
     # sensorStruct["battery"] = tempdata['battery']
     # print("sensorStruct : ", sensorStruct)
 
     if sensorStruct["sensor"] == "zigbee/Sensor1" :
-        sensor1.setText(u"Salon :\n" + str(sensorStruct["temperature"]) + "°C\nHumidité : " + str(sensorStruct["humidity"]) + "%\nPression : " + str(sensorStruct["pressure"]) + "hPa\n")
+        sensor1.setText(f'Salon :\n{sensorStruct["temperature"]:.1f}°C \nHumidité : {sensorStruct["humidity"]:.0f}% \nPression : {sensorStruct["pressure"]:.0f}hPa \n')
     elif sensorStruct["sensor"] == "zigbee/Sensor2" :
-        sensor2.setText(u"Chambre :\n" + str(sensorStruct["temperature"]) + "°C\nHumidité : " + str(sensorStruct["humidity"]) + "%\nPression : " + str(sensorStruct["pressure"]) + "hPa\n")
+        sensor2.setText(f'Chambre :\n{sensorStruct["temperature"]:.1f}°C \nHumidité : {sensorStruct["humidity"]:.0f}% \nPression : {sensorStruct["pressure"]:.0f}hPa \n')
     else :
         "tempfinished() error : Could not find the corresponding MQTT topic " + sensorStruct["sensor"] + " in the configuration !"
         return
-    # if Config.metric:
-    #     s = Config.LInsideTemp + \
-    #         "%3.1f" % ((float(tempdata['temp']) - 32.0) * 5.0 / 9.0)
-    #     if tempdata['temps']:
-    #         if len(tempdata['temps']) > 1:
-    #             s = ''
-    #             for tk in tempdata['temps']:
-    #                 s += ' ' + tk + ':' + \
-    #                     "%3.1f" % (
-    #                         (float(tempdata['temps'][tk]) - 32.0) * 5.0 / 9.0)
-    # else:
-    #     s = Config.LInsideTemp + tempdata['temp']
-    #     if tempdata['temps']:
-    #         if len(tempdata['temps']) > 1:
-    #             s = ''
-    #             for tk in tempdata['temps']:
-    #                 s += ' ' + tk + ':' + tempdata['temps'][tk]
-    # temp.setText(s)
-
 
 def tempm(f):
     return (f - 32) / 1.8
