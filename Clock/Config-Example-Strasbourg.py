@@ -54,6 +54,8 @@ fontattr = ''
 dimcolor = QColor('#000000')
 dimcolor.setAlpha(0)
 
+use_metar = 0   # set use_metar to 1 if you live near an airport
+                # if set to 0, PiWeatherStation will use openweathermap data to get the actual weather conditions
 METAR="LFST"  # Strasbourg-Entzheim Airport (SXB)
 
 # Language Specific wording

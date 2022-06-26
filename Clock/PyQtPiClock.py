@@ -316,20 +316,20 @@ def tempfinished(msg):
         "tempfinished() error : Could not find the corresponding MQTT topic " + sensorStruct["sensor"] + " in the configuration !"
         return
 
-def tempm(f):
-    return (f - 32) / 1.8
+def tempToImp(f):
+    return f * 1.8 - 32
 
 
-def speedm(f):
-    return f * 0.621371192
+def speedMph(f):
+    return f / 0.621371192
 
 
 def pressi(f):
     return f * 0.029530
 
 
-def heightm(f):
-    return f * 25.4
+def heightImp(f):
+    return f / 25.4
 
 
 def barom(f):
@@ -403,15 +403,15 @@ def wxfinished_owm():
         '13n': 'snow',
         '50n': 'fog'
     }
-    attribution.setText("openweathermap.org")
-    attribution2.setText("openweathermap.org")
 
     wxstr = str(wxreply.readAll(),'utf-8')
     wxdata = json.loads(wxstr)
     f = wxdata['current']
     icon = f['weather'][0]['icon']
     icon = owmicons[icon]
-    if not supress_current:
+    if not Config.use_metar:
+        attribution.setText("openweathermap")
+        attribution2.setText("openweathermap")
         wxiconpixmap = QtGui.QPixmap(Config.icons + "/" + icon + ".png")
         wxicon.setPixmap(wxiconpixmap.scaled(
             wxicon.width(), wxicon.height(), Qt.IgnoreAspectRatio,
@@ -425,32 +425,30 @@ def wxfinished_owm():
         wxdesc2.setText(f['weather'][0]['description'])
 
         if Config.metric:
-            temper.setText('%.1f' % (tempm(f['temp'])) + u'°C')
-            temper2.setText('%.1f' % (tempm(f['temp'])) + u'°C')
-            press.setText(Config.LPressure + '%.1f' % f['pressure'] + 'mb')
-            humidity.setText(Config.LHumidity + '%.0f%%' % (f['humidity']))
+            temper.setText(f'{round(f["temp"]*2/2):.1f}°C')
+            temper2.setText(f'{round(f["temp"]*2/2):.1f}°C')
+            press.setText(Config.LPressure + f'{round(f["pressure"]):.0f}mb')
+            humidity.setText(Config.LHumidity + f'{round(f["humidity"]):.0f}%')
             wd = bearing(f['wind_deg'])
             if Config.wind_degrees:
                 wd = str(f['wind_deg']) + u'°'
             w = (Config.LWind +
                  wd + ' ' +
-                 '%.1f' % (speedm(f['wind_speed'])) + 'kmh')
+                 '%.1f' % (speedMph(f['wind_speed'])) + 'kmh')
             if 'wind_gust' in f:
                 w += (Config.Lgusting +
-                      '%.1f' % (speedm(f['wind_gust'])) + 'kmh')
+                      '%.1f' % (speedMph(f['wind_gust'])) + 'kmh')
             wind.setText(w)
-            wind2.setText(Config.LFeelslike +
-                          '%.1f' % (tempm(f['feels_like'])) + u'°C')
+            wind2.setText(Config.LFeelslike + f'{round(f["feels_like"]):.0f}°C')
             wdate.setText("{0:%H:%M}".format(datetime.datetime.fromtimestamp(
                 int(f['dt']))))
     # Config.LPrecip1hr + f['precip_1hr_metric'] + 'mm ' +
     # Config.LToday + f['precip_today_metric'] + 'mm')
         else:
-            temper.setText('%.1f' % (f['temp']) + u'°F')
-            temper2.setText('%.1f' % (f['temp']) + u'°F')
-            press.setText(
-                Config.LPressure + '%.2f' % pressi(f['pressure']) + 'in')
-            humidity.setText(Config.LHumidity + '%.0f%%' % (f['humidity']))
+            temper.setText(f'{round(tempToImp(f["temp"])*2/2):.1f}°F')
+            temper2.setText(f'{round(tempToImp(f["temp"])*2/2):.1f}°F')
+            press.setText(Config.LPressure + f'{round(pressi(f["pressure"])):.0f}in')
+            humidity.setText(Config.LHumidity + f'{round(f["humidity"]):.0f}%')
             wd = bearing(f['wind_deg'])
             if Config.wind_degrees:
                 wd = str(f['wind_deg']) + u'°'
@@ -461,13 +459,11 @@ def wxfinished_owm():
                 w += (Config.Lgusting +
                       '%.1f' % ((f['wind_gust'])) + 'kph')
             wind.setText(w)
-            wind2.setText(Config.LFeelslike +
-                          '%.1f' % (f['feels_like']) + u'°F')
+            wind2.setText(Config.LFeelslike + f'{round(tempToImp(f["feels_like"])):.0f}°F')
             wdate.setText("{0:%H:%M}".format(datetime.datetime.fromtimestamp(
                 int(f['dt']))))
     # Config.LPrecip1hr + f['precip_1hr_in'] + 'in ' +
     # Config.LToday + f['precip_today_in'] + 'in')
-
     for i in range(0, 3):
         f = wxdata['hourly'][i * 3 + 2]
         fl = forecast[i]
@@ -503,19 +499,19 @@ def wxfinished_owm():
         if Config.metric:
             if (ptype == 'snow'):
                 if (paccum > 0.05):
-                    s += Config.LSnow + '%.0f' % heightm(paccum) + 'mm '
+                    s += Config.LSnow + '%.0f' % paccum + 'mm '
             else:
                 if (paccum > 0.05):
-                    s += Config.LRain + '%.0f' % heightm(paccum) + 'mm '
-            s += '%.0f' % round(tempm(f['temp'])) + u'°C'
+                    s += Config.LRain + '%.0f' % paccum + 'mm '
+            s += '%.0f' % round(f['temp']) + u'°C'
         else:
             if (ptype == 'snow'):
                 if (paccum > 0.05):
-                    s += Config.LSnow + '%.0f' % paccum + 'in '
+                    s += Config.LSnow + '%.0f' % heightImp(paccum) + 'in '
             else:
                 if (paccum > 0.05):
-                    s += Config.LRain + '%.0f' % paccum + 'in '
-            s += '%.0f' % round(f['temp']) + u'°F'
+                    s += Config.LRain + '%.0f' % heightImp(paccum) + 'in '
+            s += '%.0f' % round(tempToImp(f['temp'])) + u'°F'
 
         wx.setStyleSheet(
             "#wx { font-size: " +
@@ -556,21 +552,21 @@ def wxfinished_owm():
         if Config.metric:
             if (ptype == 'snow'):
                 if (paccum > 0.05):
-                    s += Config.LSnow + '%.0f' % heightm(paccum) + 'mm '
+                    s += Config.LSnow + '%.0f' % paccum + 'mm '
             else:
                 if (paccum > 0.05):
-                    s += Config.LRain + '%.0f' % heightm(paccum) + 'mm '
-            s += '%.0f' % round(tempm(f['temp']['max'])) + '/' + \
-                 '%.0f' % round(tempm(f['temp']['min']))
+                    s += Config.LRain + '%.0f' % paccum + 'mm '
+            s += '%.0f' % round(f['temp']['max']) + '/' + \
+                 '%.0f' % round(f['temp']['min'])
         else:
             if (ptype == 'snow'):
                 if (paccum > 0.05):
-                    s += Config.LSnow + '%.1f' % paccum + 'in '
+                    s += Config.LSnow + '%.1f' % heightImp(paccum) + 'in '
             else:
                 if (paccum > 0.05):
-                    s += Config.LRain + '%.1f' % paccum + 'in '
-            s += '%.0f' % round(f['temp']['max']) + '/' + \
-                 '%.0f' % round(f['temp']['min'])
+                    s += Config.LRain + '%.1f' % heightImp(paccum) + 'in '
+            s += '%.0f' % round(tempToImp(f['temp']['max'])) + '/' + \
+                 '%.0f' % round(tempToImp(f['temp']['min']))
 
         wx.setStyleSheet(
             "#wx { font-size: "
@@ -1169,6 +1165,11 @@ def wxfinished_metar():
     global wind, wind2, wdate, bottom
     global wxicon2, temper2, wxdesc2
     global daytime
+    global attribution, attribution2
+
+    attribution.setText("METAR " + Config.METAR)
+    attribution2.setText("METAR " + Config.METAR)
+
 
     try:
         wxstr = str(metarreply.readAll(),'utf-8')
@@ -1272,7 +1273,7 @@ def wxfinished_metar():
                    '%.1f' % (f.wind_gust.value('KMH')) + 'kmh')
         wind.setText(ws)
         wind2.setText(Config.LFeelslike +
-                      ('%.1f' % (tempm(feels_like(f))) + u'°C'))
+                      ('%.0f' % (round(feels_like(f))) + u'°C'))
         wdate.setText("{0:%H:%M}".format(dt))
 # Config.LPrecip1hr + f['precip_1hr_metric'] + 'mm ' +
 # Config.LToday + f['precip_today_metric'] + 'mm')
@@ -1309,7 +1310,7 @@ def getwx():
     global supress_current
     supress_current = False
     try:
-        if Config.METAR != '':
+        if Config.use_metar :
             supress_current = True
             getwx_metar()
     except:
@@ -1369,7 +1370,7 @@ def getwx_owm():
         ApiKeys.owmapi
     wxurl += "&lat=" + str(Config.location.lat) + '&lon=' + \
         str(Config.location.lng)
-    wxurl += '&units=imperial&lang=' + Config.Language.lower()
+    wxurl += '&units=metric&lang=' + Config.Language.lower()
     wxurl += '&r=' + str(random.random())
     print(wxurl)
     r = QUrl(wxurl)
