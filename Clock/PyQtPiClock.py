@@ -302,8 +302,11 @@ def tempfinished(msg):
     sensorStruct["temperature"] = round(tempdata['temperature'],1)
     sensorStruct["pressure"] = round(tempdata['pressure'])
     sensorStruct["humidity"] = round(tempdata['humidity'])
+    sensorStruct["iconsignal"] = ''
+    sensorStruct["iconbat"] = ''
     try:
         sensorStruct["quality"] = tempdata['linkquality']
+        sensorStruct["iconsignal"] = getSignalIcon(float(tempdata['linkquality']))
     except:
         print("Info : no quality information available in the MQTT message")
         pass
@@ -327,6 +330,11 @@ def tempfinished(msg):
             sensor1Battery.setPixmap(resIcon.scaled(
                 sensor1Battery.width(),sensor1Battery.height(), Qt.IgnoreAspectRatio,
             Qt.SmoothTransformation))
+        if sensorStruct["iconsignal"] != '':
+            resIcon = QPixmap('icons/' + sensorStruct["iconsignal"] + '.png')
+            sensor1Strength.setPixmap(resIcon.scaled(
+                sensor1Strength.width(),sensor1Strength.height(), Qt.IgnoreAspectRatio,
+            Qt.SmoothTransformation))
     elif sensorStruct["sensor"] == "zigbee/Sensor2" :
         sensor2.setText(f'Chambre :\n{sensorStruct["temperature"]:.1f}°C \nHumidité : {sensorStruct["humidity"]:.0f}% \nPression : {sensorStruct["pressure"]:.0f}hPa \n')
         sensor2Date.setText("{0:%H:%M}".format(datetime.datetime.now()))
@@ -334,6 +342,11 @@ def tempfinished(msg):
             resIcon = QPixmap('icons/' + sensorStruct["iconbat"] + '.png')
             sensor2Battery.setPixmap(resIcon.scaled(
                 sensor1Battery.width(),sensor1Battery.height(), Qt.IgnoreAspectRatio,
+            Qt.SmoothTransformation))
+        if sensorStruct["iconsignal"] != '':
+            resIcon = QPixmap('icons/' + sensorStruct["iconsignal"] + '.png')
+            sensor2Strength.setPixmap(resIcon.scaled(
+                sensor2Strength.width(),sensor2Strength.height(), Qt.IgnoreAspectRatio,
             Qt.SmoothTransformation))
     else :
         print("tempfinished() error : Could not find the corresponding MQTT topic " + sensorStruct["sensor"] + " in the configuration !")
@@ -347,10 +360,15 @@ def getBatteryIcon(f):
     else:
         return 'lowbattery'
 
-
-def tempToImp(f):
-    return f * 1.8 - 32
-
+def getSignalIcon(f):
+    if f > 191 :
+        return 'highsignal'
+    elif f > 127 :
+        return 'mediumhighsignal'
+    elif f > 63 : 
+        return 'mediumlowsignal'
+    else : 
+        return 'lowsignal'
 
 def speedMph(f):
     return f / 0.621371192
@@ -2765,6 +2783,11 @@ sensor1Date.setStyleSheet("#sensor1Date { background-color: transparent; color: 
 sensor1Date.setAlignment(Qt.AlignHCenter | Qt.AlignTop)
 sensor1Date.setGeometry(width / 2 - 400 * xscale , height - 140 * yscale, 400 * xscale, 20 * yscale)
 
+sensor1Strength = QtWidgets.QLabel(foreGround)
+sensor1Strength.setStyleSheet("#sensor1Strength { background-color: transparent; }")
+sensor1Strength.setObjectName("sensor1Strength")
+sensor1Strength.setGeometry(width / 2 - 310 * xscale , height - 250 * yscale, 40 * xscale, 40 * yscale)
+
 sensor2 = QtWidgets.QLabel(foreGround)
 sensor2.setObjectName("sensor2")
 sensor2.setStyleSheet("#sensor2 { font-family:sans-serif; color: " +
@@ -2793,6 +2816,11 @@ sensor2Date.setStyleSheet("#sensor2Date { background-color: transparent; color: 
                     "}")
 sensor2Date.setAlignment(Qt.AlignHCenter | Qt.AlignTop)
 sensor2Date.setGeometry(width / 2 , height - 140 * yscale, 400 * xscale, 20 * yscale)
+
+sensor2Strength = QtWidgets.QLabel(foreGround)
+sensor2Strength.setStyleSheet("#sensor2Strength { background-color: transparent; }")
+sensor2Strength.setObjectName("sensor2Strength")
+sensor2Strength.setGeometry(width / 2 + 275 * xscale , height - 250 * yscale, 40 * xscale, 40 * yscale)
 
 manager = QtNetwork.QNetworkAccessManager()
 
