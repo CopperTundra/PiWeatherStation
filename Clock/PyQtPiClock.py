@@ -323,12 +323,18 @@ def tempfinished(msg):
         sensor1.setText(f'Salon :\n{sensorStruct["temperature"]:.1f}°C \nHumidité : {sensorStruct["humidity"]:.0f}% \nPression : {sensorStruct["pressure"]:.0f}hPa \n')
         sensor1Date.setText("{0:%H:%M}".format(datetime.datetime.now()))
         if sensorStruct["iconbat"] != '':
-            sensor1Battery.setPixmap(QPixmap('icons/' + sensorStruct["iconbat"] + '.png'))
+            resIcon = QPixmap('icons/' + sensorStruct["iconbat"] + '.png')
+            sensor1Battery.setPixmap(resIcon.scaled(
+                sensor1Battery.width(),sensor1Battery.height(), Qt.IgnoreAspectRatio,
+            Qt.SmoothTransformation))
     elif sensorStruct["sensor"] == "zigbee/Sensor2" :
         sensor2.setText(f'Chambre :\n{sensorStruct["temperature"]:.1f}°C \nHumidité : {sensorStruct["humidity"]:.0f}% \nPression : {sensorStruct["pressure"]:.0f}hPa \n')
         sensor2Date.setText("{0:%H:%M}".format(datetime.datetime.now()))
         if sensorStruct["iconbat"] != '':
-            sensor2Battery.setPixmap(QPixmap('icons/' + sensorStruct["iconbat"] + '.png'))
+            resIcon = QPixmap('icons/' + sensorStruct["iconbat"] + '.png')
+            sensor2Battery.setPixmap(resIcon.scaled(
+                sensor1Battery.width(),sensor1Battery.height(), Qt.IgnoreAspectRatio,
+            Qt.SmoothTransformation))
     else :
         print("tempfinished() error : Could not find the corresponding MQTT topic " + sensorStruct["sensor"] + " in the configuration !")
         return
@@ -2743,10 +2749,9 @@ sensor1.setGeometry(width / 2 - 400 * xscale , height - 280 * yscale, 400 * xsca
 sensor1.setAlignment(Qt.AlignHCenter | Qt.AlignTop)
 
 sensor1Battery = QtWidgets.QLabel(foreGround)
+sensor1Battery.setStyleSheet("#sensor1Battery { background-color: transparent; }")
 sensor1Battery.setObjectName("sensor1Battery")
-sensor1Battery.setAlignment(Qt.AlignHCenter | Qt.AlignTop)
 sensor1Battery.setGeometry(width / 2 - 135 * xscale , height - 250 * yscale, 40 * xscale, 40 * yscale)
-sensor1Battery.setScaledContents(True)
 
 sensor1Date = QtWidgets.QLabel(foreGround)
 sensor1Date.setObjectName("sensor1Date")
@@ -2773,10 +2778,9 @@ sensor2.setGeometry(width / 2 , height - 280 * yscale, 400 * xscale, 200 * yscal
 sensor2.setAlignment(Qt.AlignHCenter | Qt.AlignTop)
 
 sensor2Battery = QtWidgets.QLabel(foreGround)
+sensor2Battery.setStyleSheet("#sensor2Battery { background-color: transparent; }")
 sensor2Battery.setObjectName("sensor2Battery")
-sensor2Battery.setAlignment(Qt.AlignHCenter | Qt.AlignTop)
 sensor2Battery.setGeometry(width / 2 + 90 * xscale , height - 250 * yscale, 40 * xscale, 40 * yscale)
-sensor2Battery.setScaledContents(True)
 
 sensor2Date = QtWidgets.QLabel(foreGround)
 sensor2Date.setObjectName("sensor2Date")
