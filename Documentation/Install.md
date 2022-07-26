@@ -183,13 +183,18 @@ but it is probably not needed.
 ```
 sudo crontab -e
 ```
-add the following line
+For exeample, add the following lines :
 ```
-22 3 * * * /sbin/reboot
+00 00 * * 6,0 /home/pi/PiClock/night.sh
+00 09 * * 6,0 /usr/sbin/shutdown -r 0
+30 22 * * 1-5 /home/pi/PiClock/night.sh
+00 06 * * 1-5 /usr/sbin/shutdown -r 0
+
 ```
 save the file
 
-This sets the reboot to occur at 3:22am every day.   Adjust as needed.
+This will disable the screen and stop the app at 22:30 and reboot at 06:00 every monday-friday.
+And it will do the same on week-ends between 00:00 and 09:00.
 
 ### Updating to newer/updated versions
 Since we pulled the software from github originally, it can be updated
