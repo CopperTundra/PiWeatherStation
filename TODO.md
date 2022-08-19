@@ -12,3 +12,4 @@
 - Handle properly METAR failed requests ✅
 - Add last update timestamp to internal temperature sensors ✅
 - Switch between different backgrounds at day and night time (and get rid of the switcher script)
+- Improve greyed squares borders, to have nice "faded" effects

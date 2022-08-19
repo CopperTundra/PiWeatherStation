@@ -2507,6 +2507,12 @@ radar4rect = QtCore.QRect(726 * xscale, 50 * yscale,
                           700 * xscale, 700 * yscale)
 objradar4 = Radar(frame2, Config.radar4, radar4rect, "radar4")
 
+actualweather = QtWidgets.QLabel(foreGround)
+actualweather.setObjectName("actualweather")
+actualweather.setStyleSheet("#actualweather { background-color: rgba(0, 0, 0, 40%);}")
+                    # " border-width: 10px; border-style: solid; border-image: linear-gradient(to top, black, rgba(0, 0, 0, 0)) 1 100%; }")
+
+actualweather.setGeometry(0, 0, 300 * xscale, 337 * yscale)
 
 datex = QtWidgets.QLabel(foreGround)
 datex.setObjectName("datex")
@@ -2724,7 +2730,7 @@ forecast = []
 for i in range(0, 9):
     lab = QtWidgets.QLabel(foreGround)
     lab.setObjectName("forecast" + str(i))
-    lab.setStyleSheet("QWidget { background-color: transparent; color: " +
+    lab.setStyleSheet("QWidget { background-color: rgba(0, 0, 0, 40%); color: " +
                       Config.textcolor +
                       "; font-size: " +
                       str(int(20 * xscale * Config.fontmult)) +
@@ -2735,7 +2741,7 @@ for i in range(0, 9):
                     300 * xscale, 100 * yscale)
 
     icon = QtWidgets.QLabel(lab)
-    icon.setStyleSheet("#icon { background-color: transparent; }")
+    icon.setStyleSheet("#icon { background-color: rgba(0, 0, 0, 40%); }")
     icon.setGeometry(0, 0, 100 * xscale, 100 * yscale)
     icon.setObjectName("icon")
 
@@ -2758,12 +2764,12 @@ sensor1 = QtWidgets.QLabel(foreGround)
 sensor1.setObjectName("sensor1")
 sensor1.setStyleSheet("#sensor1 { font-family:sans-serif; color: " +
                      Config.textcolor +
-                     "; background-color: transparent; font-size: " +
+                     "; background-color: rgba(0, 0, 0, 40%); font-size: " +
                      str(int(30 * xscale * Config.fontmult)) +
                      "px; " +
                      Config.fontattr +
                      "}")
-sensor1.setGeometry(width / 2 - 400 * xscale , height - 280 * yscale, 400 * xscale, 200 * yscale)
+sensor1.setGeometry(width / 2 - 400 * xscale , height - 280 * yscale, 400 * xscale, 170 * yscale)
 sensor1.setAlignment(Qt.AlignHCenter | Qt.AlignTop)
 
 sensor1Battery = QtWidgets.QLabel(foreGround)
@@ -2792,12 +2798,12 @@ sensor2 = QtWidgets.QLabel(foreGround)
 sensor2.setObjectName("sensor2")
 sensor2.setStyleSheet("#sensor2 { font-family:sans-serif; color: " +
                      Config.textcolor +
-                     "; background-color: transparent; font-size: " +
+                     "; background-color: rgba(0, 0, 0, 40%); font-size: " +
                      str(int(30 * xscale * Config.fontmult)) +
                      "px; " +
                      Config.fontattr +
                      "}")
-sensor2.setGeometry(width / 2 , height - 280 * yscale, 400 * xscale, 200 * yscale)
+sensor2.setGeometry(width / 2 , height - 280 * yscale, 400 * xscale, 170 * yscale)
 sensor2.setAlignment(Qt.AlignHCenter | Qt.AlignTop)
 
 sensor2Battery = QtWidgets.QLabel(foreGround)
