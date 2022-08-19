@@ -167,7 +167,6 @@ def moon_phase(dt=None):
     lunations = 0.20439731 + float(days) * 0.03386319269
     return lunations % 1.0
 
-#TODO: fix bug crash with clock ticking 
 def tick():
     global hourpixmap, minpixmap, secpixmap
     global hourpixmap2, minpixmap2, secpixmap2
@@ -288,7 +287,7 @@ def tick():
         bottomText += (Config.LSunRise +
                        "{0:%H:%M}".format(sunrise) +
                        Config.LSet +
-                       "{0:%H:%M}".format(sunset))
+                       "{0:%H:%M}".format(sunset)) + "\n"
         bottomText += (Config.LMoonPhase + phase(moon_phase()))
         bottom.setText(bottomText)
 
@@ -2705,13 +2704,13 @@ bottom = QtWidgets.QLabel(foreGround)
 bottom.setObjectName("bottom")
 bottom.setStyleSheet("#bottom { font-family:sans-serif; color: " +
                      Config.textcolor +
-                     "; background-color: transparent; font-size: " +
+                     "; background-color: rgba(0, 0, 0, 40%); font-size: " +
                      str(int(30 * xscale * Config.fontmult)) +
                      "px; " +
                      Config.fontattr +
                      "}")
 bottom.setAlignment(Qt.AlignHCenter | Qt.AlignTop)
-bottom.setGeometry(0, height - 50 * yscale, width, 50 * yscale)
+bottom.setGeometry(310 * xscale, height - 78 * yscale, width - 620 * xscale, 80 * yscale)
 
 temp = QtWidgets.QLabel(foreGround)
 temp.setObjectName("temp")
