@@ -185,9 +185,9 @@ sudo crontab -e
 ```
 For exeample, add the following lines :
 ```
-00 00 * * 6,0 /home/pi/PiClock/night.sh
-00 09 * * 6,0 /usr/sbin/shutdown -r 0
-30 22 * * 1-5 /home/pi/PiClock/night.sh
+30 22 * * 0-4 /home/pi/PiClock/night.sh
+00 00 * * 6,7 /home/pi/PiClock/night.sh
+00 09 * * 6,7 /usr/sbin/shutdown -r 0
 00 06 * * 1-5 /usr/sbin/shutdown -r 0
 
 ```
