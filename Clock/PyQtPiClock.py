@@ -372,6 +372,8 @@ def getSignalIcon(f):
 def speedMph(f):
     return f / 0.621371192
 
+def speedKmh(f):
+    return f * 3.6
 
 def pressi(f):
     return f * 0.029530
@@ -470,8 +472,8 @@ def wxfinished_owm():
             wxicon.height(),
             Qt.IgnoreAspectRatio,
             Qt.SmoothTransformation))
-        wxdesc.setText(f['weather'][0]['description'])
-        wxdesc2.setText(f['weather'][0]['description'])
+        wxdesc.setText(f['weather'][0]['description'].capitalize())
+        wxdesc2.setText(f['weather'][0]['description'].capitalize())
 
         if Config.metric:
             temper.setText(f'{round(f["temp"]*2/2):.1f}°C')
@@ -483,10 +485,10 @@ def wxfinished_owm():
                 wd = str(f['wind_deg']) + u'°'
             w = (Config.LWind +
                  wd + ' ' +
-                 '%.1f' % (speedMph(f['wind_speed'])) + 'kmh')
+                 '%.1f' % (speedKmh(f['wind_speed'])) + 'kmh')
             if 'wind_gust' in f:
                 w += (Config.Lgusting +
-                      '%.1f' % (speedMph(f['wind_gust'])) + 'kmh')
+                      '%.1f' % (speedKmh(f['wind_gust'])) + 'kmh')
             wind.setText(w)
             wind2.setText(Config.LFeelslike + f'{round(f["feels_like"]):.0f}°C')
             wdate.setText("{0:%H:%M}".format(datetime.datetime.fromtimestamp(
