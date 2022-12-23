@@ -1,12 +1,12 @@
 - Fix temperature minus weird behavior around zero Celsius for METAR temperature and forecast temperatures ✅
 - Replace actual weather with OpenWeatherMap data to increase precision ✅
-- Add a partially transparent background for the Zigbee sensors data
+- Add a partially transparent background for the Zigbee sensors data ✅
 - Add a battery level using pictograms for the Zigbee sensors ✅
 - Improve energy management by setting screen brightness and better scheduling shutdown hours ✅ 
-- Increase size of the METAR actual data, to fix wind string sometimes too long (especially with wind gusts information)
-- Fix strange rain map rendering
-- Set weather forecast to 24hrs format and increase clarity of the boxes
-- Set moon phase and sunrise times on two lines
+- Increase size of the METAR actual data, to fix wind string sometimes too long (especially with wind gusts information) ✅
+- Fix strange rain map rendering ✅
+- Set weather forecast to 24hrs format and increase clarity of the boxes ✅
+- Set moon phase and sunrise times on two lines ✅
 - Cleanup the code
 - Improve documentation and install scripts
 - Handle properly METAR failed requests ✅
