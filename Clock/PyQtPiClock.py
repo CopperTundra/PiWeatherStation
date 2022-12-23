@@ -1740,12 +1740,12 @@ class Radar(QtWidgets.QLabel):
             if self.ticker < 5:
                 return
         self.ticker = 0
-        # print("len frameImages :", len(self.frameImages), "self.displayedFrame : ", self.displayedFrame)
-        if self.displayedFrame >= len(self.frameImages):
-            self.displayedFrame = 0
+        print("len frameImages :", len(self.frameImages), "self.displayedFrame : ", self.displayedFrame)
         f = self.frameImages[self.displayedFrame]
         self.wwx.setPixmap(f["image"])
         self.displayedFrame += 1
+        if self.displayedFrame >= len(self.frameImages):
+            self.displayedFrame = 0
 
     def get(self, t=0):
         t = int(t / 600)*600
@@ -1786,12 +1786,6 @@ class Radar(QtWidgets.QLabel):
         self.tilereq = QNetworkRequest(QUrl(self.tileurls[i]))
         self.tilereply = manager.get(self.tilereq)
         self.tilereply.finished.connect(self.getTilesReply)
-        # QtCore.QObject.connect(self.tilereply, QtCore.SIGNAL(
-        #         "finished()"), self.getTilesReply)
-
-        # self.basereply.finished.connect(self.basefinished)
-        # QtCore.QObject.connect(self.basereply, QtCore.SIGNAL(
-        #     "finished()"), self.basefinished)
 
     def getTilesReply(self):
         print ("getTilesReply " + str(self.getIndex))
