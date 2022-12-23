@@ -1,0 +1,14 @@
+[Unit]
+Description=PiWeatherStation
+After=network.target zigbee2mqtt mosquitto
+
+[Service]
+ExecStart=/bin/sh -c "/bin/sh ~/PiWeatherStation/startup.sh -m 15" 
+StandardOutput=inherit
+StandardError=inherit
+Restart=always
+RestartSec=10s
+User=olivier
+
+[Install]
+WantedBy=multi-user.target
