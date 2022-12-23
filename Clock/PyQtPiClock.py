@@ -530,8 +530,20 @@ def wxfinished_owm():
             Qt.SmoothTransformation))
         wx = fl.findChild(QtWidgets.QLabel, "wx")
         day = fl.findChild(QtWidgets.QLabel, "day")
-        day.setText("{0:%A %I:%M%p}".format(datetime.datetime.fromtimestamp(
-            int(f['dt']))))
+
+        # # display the forecast day only if it is different from today
+        # if datetime.datetime.fromtimestamp(int(f['dt'])).strftime("%d") != datetime.datetime.now().strftime("%d") :
+        #     day.setText("{0:%A %H:%M}".format(datetime.datetime.fromtimestamp(
+        #         int(f['dt']))))
+        # else :
+        #     day.setText("{0:%H:%M}".format(datetime.datetime.fromtimestamp(
+        #         int(f['dt']))))
+        
+        # display the forecast hours difference (example : "+3h") rather than the forecast time
+        diff = datetime.datetime.fromtimestamp(int(f['dt'])) - datetime.datetime.now()
+        diff_hours = round(diff.seconds / 3600)
+        day.setText("+ " + str(diff_hours) + "h")
+
         s = ''
         pop = 0
         ptype = ''
@@ -1740,7 +1752,7 @@ class Radar(QtWidgets.QLabel):
             if self.ticker < 5:
                 return
         self.ticker = 0
-        print("len frameImages :", len(self.frameImages), "self.displayedFrame : ", self.displayedFrame)
+        # print("len frameImages :", len(self.frameImages), "self.displayedFrame : ", self.displayedFrame)
         f = self.frameImages[self.displayedFrame]
         self.wwx.setPixmap(f["image"])
         self.displayedFrame += 1
