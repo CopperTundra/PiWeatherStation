@@ -321,7 +321,7 @@ def tempfinished(msg):
         print("Info : no battery information available in the MQTT message")
         pass
 
-    if sensorStruct["sensor"] == "zigbee/Sensor1" :
+    if sensorStruct["sensor"] == "zigbee/sensor1" :
         sensor1.setText(f'Salon :\n{sensorStruct["temperature"]:.1f}°C \nHumidité : {sensorStruct["humidity"]:.0f}% \nPression : {sensorStruct["pressure"]:.0f}hPa \n')
         sensor1Date.setText("{0:%H:%M}".format(datetime.datetime.now()))
         if sensorStruct["iconbat"] != '':
@@ -334,7 +334,7 @@ def tempfinished(msg):
             sensor1Strength.setPixmap(resIcon.scaled(
                 sensor1Strength.width(),sensor1Strength.height(), Qt.IgnoreAspectRatio,
             Qt.SmoothTransformation))
-    elif sensorStruct["sensor"] == "zigbee/Sensor2" :
+    elif sensorStruct["sensor"] == "zigbee/sensor2" :
         sensor2.setText(f'Chambre :\n{sensorStruct["temperature"]:.1f}°C \nHumidité : {sensorStruct["humidity"]:.0f}% \nPression : {sensorStruct["pressure"]:.0f}hPa \n')
         sensor2Date.setText("{0:%H:%M}".format(datetime.datetime.now()))
         if sensorStruct["iconbat"] != '':
@@ -1506,8 +1506,8 @@ def getallwx():
 def on_stateChanged(state):
         if state == MqttClient.Connected:
             print(state)
-            client.subscribe("zigbee/Sensor1")
-            client.subscribe("zigbee/Sensor2")
+            client.subscribe("zigbee/sensor1")
+            client.subscribe("zigbee/sensor2")
 
 @QtCore.pyqtSlot(str)
 def on_messageSignal(msg):

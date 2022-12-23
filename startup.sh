@@ -21,7 +21,7 @@
 #
 
 #
-cd $HOME/PiClock
+cd $HOME/PiWeatherStation
 #
 if [ "$DISPLAY" = "" ]
 then
