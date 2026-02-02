@@ -103,7 +103,7 @@ care not to disturb the format while changing the data.
 
 The first thing is to change the primary_coordinates to yours. That is really all that is manditory. Easiest way to get them is to use Google Maps and right click on your location, by clicking on your coordinates you will copy them. 
 
-![How to : Google Maps Coordinates](https://raw.githubusercontent.com/CopperTundra/PiWeatherStation/master/Documentation/GoogleMapsCoordinates.png)
+![How to : Google Maps Coordinates](https://raw.githubusercontent.com/CopperTundra/PiWeatherStation/master/Pictures/GoogleMapsCoordinates.png)
 
 At this point, I'd not recommend many other changes until you have tested
 and gotten it running.

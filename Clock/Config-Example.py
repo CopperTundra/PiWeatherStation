@@ -26,22 +26,12 @@ slide_time = 305              # in seconds, 3600 per hour
 slides = 'images/slideshow'   # the path to your local images
 slide_bg_color = "#000"       # https://htmlcolorcodes.com/  black #000
 
-digital = 0                 # 1 = Digtal Clock, 0 = Analog Clock
+digital = 0                 # 1 = Digital Clock, 0 = Analog Clock
 
 # Goes with light blue config (like the default one)
 digitalcolor = "#50CBEB"
 digitalformat = "{0:%I:%M\n%S %p}"  # Format of the digital clock face
 digitalsize = 200
-
-# The above example shows in this way:
-#  https://github.com/n0bel/PiClock/blob/master/Documentation/Digital%20Clock%20v1.jpg
-# ( specifications of the time string are documented here:
-#  https://docs.python.org/2/library/time.html#time.strftime )
-
-# digitalformat = "{0:%I:%M}"
-# digitalsize = 250
-#  The above example shows in this way:
-#  https://github.com/n0bel/PiClock/blob/master/Documentation/Digital%20Clock%20v2.jpg
 
 digitalformat2 = "{0:%H:%M:%S}"  # Format of the digital time on second screen
 
